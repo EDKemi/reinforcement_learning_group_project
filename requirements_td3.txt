@@ -1,0 +1,9 @@
+# Minimal dependencies for the TD3 agent (training + evaluation)
+
+numpy>=1.24
+# Torch CPU build will be selected automatically on Windows via pip
+torch>=2.2
+# Gymnasium with Box2D environments (BipedalWalker)
+gymnasium[box2d]>=0.29.1
+# For human rendering on Windows during evaluation
+pygame>=2.5

@@ -12,3 +12,11 @@ We compare performance before and after training and evaluate against baseline a
 - Compare trained agent performance with baseline agents.
 - Analyse training results, including learning curves and qualitative behaviour.
 - Produce report, video presentation, and demonstration videos as per assessment requirements.
+
+## Agents
+
+### TD3
+1. py -3.11 -m venv .venv 
+2. .\.venv\Scripts\Activate.ps1   
+3. pip install -r requirements.txt
+4. Run python -m agents.td3.train

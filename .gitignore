@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Editor/OS
+.DS_Store
+.idea/
+.vscode/
+.cursorignore
+
+# RL artifacts
+logs/
+runs/
+checkpoints/
+outputs/
+videos/
+wandb/
+*.pt
+
+# Local config
+.env
+
+
