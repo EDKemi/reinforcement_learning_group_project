@@ -13,7 +13,7 @@ def get_logger(name: str = "sac", log_path: str | None = None, level: int = logg
     Includes file and line number for clarity.
     """
     logger = logging.getLogger(name)
-    if logger.handlers:   # Already configured, just return
+    if logger.handlers:
         return logger
 
     logger.setLevel(level)

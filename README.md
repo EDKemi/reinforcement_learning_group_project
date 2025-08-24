@@ -12,3 +12,17 @@ We compare performance before and after training and evaluate against baseline a
 - Compare trained agent performance with baseline agents.
 - Analyse training results, including learning curves and qualitative behaviour.
 - Produce report, video presentation, and demonstration videos as per assessment requirements.
+
+## Running SAC training
+# Activate the project env created with pyenv/venv
+pyenv local bipedal_walker_rl     # or: source .venv/bin/activate
+
+# Install req
+pip install -r requirements.txt
+
+# Train and plot results
+- Python run_all.py (check comments in run_all.py first)
+- Entropy can be updated in train_sac_tf.py line 47
+- eval saved in "results/{environment}/eval_log.csv"
+- plot results using results.ipynb
+- videos saved in "videos/{env}". Make sure "do_record_after" is set to true in run_all.py

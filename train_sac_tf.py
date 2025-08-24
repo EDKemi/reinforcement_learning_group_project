@@ -6,6 +6,7 @@ import tensorflow as tf
 from sac_utils import set_seed, make_env, ReplayBuffer
 from sac_agent import SACAgent
 from sac_utils import get_logger
+import json
 
 
 def evaluate(env, agent, episodes=5):
@@ -43,12 +44,14 @@ def train(
 
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
-    agent = SACAgent(obs_dim, act_dim, lr=3e-4, gamma=0.99, tau=0.005)
+    agent = SACAgent(obs_dim, act_dim, lr=3e-4, gamma=0.99, tau=0.005, target_entropy=-0.5 * act_dim)
     buf = ReplayBuffer(obs_dim, act_dim, size=1_000_000)
 
     csv_path = os.path.join(results_dir, "eval_log.csv")
     with open(csv_path, "w", newline="") as f:
-        csv.writer(f).writerow(["step", "avg_return", "std_return", "all_returns_json"])
+        csv.writer(f).writerow([
+            "step", "episodes", "avg_return", "std_return", "all_returns_json"
+        ])
 
     # Warmup
     s, _ = env.reset()
@@ -61,27 +64,41 @@ def train(
     logger.info(f"Warmup complete: {start_steps} random steps")
 
     # Train
+    episodes = 0
     s, _ = env.reset()
     for t in range(1, total_steps + 1):
         a = agent.act(s, eval_mode=False).numpy()
         s2, r, term, trunc, _ = env.step(a)
         d = float(term or trunc)
         buf.store(s, a, r, s2, d)
-        s, _ = env.reset() if d else (s2, {})
+
+        if d:  # episode finished
+            episodes += 1
+            s, _ = env.reset()
+        else:
+            s = s2
 
         batch = buf.sample(batch_size)
         metrics = agent.update(batch)
 
         if t % 1000 == 0:
             m = {k: float(v.numpy() if isinstance(v, tf.Tensor) else v) for k, v in metrics.items()}
-            logger.info(f"t={t:6d} | q1={m['q1_loss']:.3f} q2={m['q2_loss']:.3f} "
-                        f"pi={m['pi_loss']:.3f} alpha={m['alpha']:.3f}")
+            logger.info(
+                f"t={t:6d} | episodes={episodes} | "
+                f"q1={m['q1_loss']:.3f} q2={m['q2_loss']:.3f} "
+                f"pi={m['pi_loss']:.3f} alpha={m['alpha']:.3f}"
+            )
 
         if t % eval_every == 0:
             avg, std, all_rets = evaluate(eval_env, agent, episodes=5)
-            logger.info(f"[EVAL] step={t}  avg_return={avg:.1f} ± {std:.1f}")
+            logger.info(f"[EVAL] step={t} | episodes={episodes} | avg_return={avg:.1f} ± {std:.1f}")
+
             with open(csv_path, "a", newline="") as f:
-                csv.writer(f).writerow([t, avg, std, str(all_rets)])
+                csv.writer(f).writerow([
+                    t, episodes, avg, std,
+                    json.dumps(all_rets)
+                ])
+
             agent.save(os.path.join(results_dir, f"sac_{t}"))
 
     # Final weights

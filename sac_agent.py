@@ -37,7 +37,7 @@ class SACAgent:
         self.alpha_opt = tf.keras.optimizers.Adam(lr)
         self.target_entropy = -float(act_dim) if target_entropy is None else target_entropy
         self.logger = get_logger(name="sac.agent")
-        self.logger.info("Initialized SACAgent")
+        self.logger.info("Initialised SACAgent")
 
     @property
     def alpha(self):
