@@ -14,13 +14,13 @@ We compare performance before and after training and evaluate against baseline a
 - Produce report, video presentation, and demonstration videos as per assessment requirements.
 
 ## Running SAC training
-# Activate the project env created with pyenv/venv
+### Activate the project env
 pyenv local bipedal_walker_rl     # or: source .venv/bin/activate
 
-# Install req
+### Install req
 pip install -r requirements.txt
 
-# Train and plot results
+### Train and plot results
 - Python run_all.py (check comments in run_all.py first)
 - Entropy can be updated in train_sac_tf.py line 47
 - eval saved in "results/{environment}/eval_log.csv"
