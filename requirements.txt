@@ -1,0 +1,6 @@
+gymnasium[box2d]==1.0.0
+numpy
+torch
+moviepy
+imageio[ffmpeg]
+matplotlib

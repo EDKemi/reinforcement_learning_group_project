@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv
+venv/
+.envrc
+
+# Results / videos (can be large)
+results/
+videos/
+plots/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
